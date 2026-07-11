@@ -67,6 +67,7 @@ fixtures/
 - Command framework with stable errors, exit codes, logging, `--json`, and no accidental secret output.
 - Package boundaries and dependency direction.
 - Protected npm trusted publishing with provenance.
+- [Tegami](https://tegami.fuma-nama.dev/) manages changelogs, version bumps, and publish orchestration: conventional-commit/Markdown changelogs under `.tegami/`, computed bumps written to a publish lock, and CI publishing from that lock.
 
 ### Acceptance
 

@@ -7,6 +7,7 @@
 - [ ] Add cross-platform CI for macOS, Linux, and Windows.
 - [ ] Add structured output and stable exit codes for agents/CI.
 - [ ] Configure protected npm trusted publishing and provenance.
+- [ ] Set up Tegami release script (changelogs, version bumps, publish lock consumed by CI).
 
 ## Discovery
 
