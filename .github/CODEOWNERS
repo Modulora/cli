@@ -1,0 +1,8 @@
+* @Modulora/cli
+
+/.github/ @Modulora/cli @Modulora/security
+/packages/verifier/ @Modulora/cli @Modulora/security
+/packages/installer/ @Modulora/cli @Modulora/security
+/packages/lockfile/ @Modulora/cli @Modulora/security
+/fixtures/filesystem-attacks/ @Modulora/cli @Modulora/security
+/LICENSE @Modulora/maintainers
