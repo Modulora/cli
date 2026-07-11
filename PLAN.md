@@ -16,10 +16,12 @@ This repository owns:
 - project detection and install planning;
 - filesystem/dependency/config safety policy;
 - atomic writes, rollback, and `modulora.lock`;
-- CLI authentication/token storage for future private access;
+- CLI authentication/token storage (device login for private access **and publishing**);
+- authenticated publishing of a creator's own components to the registry (`modulora publish`);
+- an MCP server exposing read-only discovery to AI agents;
 - npm release pipeline.
 
-It does not own catalog data, account authorization, publishing, schema definitions, cloud entitlements, or arbitrary creator scripts.
+It does not own catalog data, account authorization rules, schema definitions, cloud entitlements, or arbitrary creator scripts. Publishing is a thin, authenticated client over the core publish endpoint (see `Modulora/modulora` #22); the CLI never defines its own authorization.
 
 ## Dependencies
 
@@ -167,7 +169,7 @@ fixtures/
 
 ### Deliverables
 
-- Browser/device login flow for future private registry access.
+- Browser/device login flow (`modulora login` / `whoami` / `logout`) for private registry access **and publishing**.
 - OS-native secure credential storage where available.
 - Short-lived scoped grants; no tokens in commands, query strings, logs, or lockfiles.
 - Stable JSON interface for read-only MCP/search integrations.
@@ -175,8 +177,38 @@ fixtures/
 ### Acceptance
 
 - Public commands work without login.
+- `modulora login` completes end-to-end and persists a revocable token that resolves to the correct user + namespace.
 - Credential revocation/expiry is handled clearly.
 - MCP remains read-only; any future write calls the same plan/approval path.
+
+## Milestone 7 — Publishing (`modulora publish`)
+
+### Deliverables
+
+- Read a local registry-item (shadcn shape) + files; validate strictly against `@modulora/spec`.
+- Authenticated POST to the core publish endpoint; server enforces namespace ownership.
+- Respect the creator distribution-channel preference (CLI is one opt-in channel; a creator may publish shadcn-only and exclude the CLI channel).
+- Version bump + changelog via Tegami; write the resulting immutable version.
+
+### Acceptance
+
+- `modulora publish` uploads a valid component; it appears in the catalog and on the creator's profile.
+- Invalid registry items are rejected with a clear, actionable error.
+- Publishing to a namespace the caller does not own fails closed (server-enforced).
+- Channel preference is honored: a shadcn-only component is never exposed as CLI-installable.
+
+## Milestone 8 — MCP server
+
+### Deliverables
+
+- MCP tools: search catalog, get component metadata + registry-item, get install command.
+- Respect visibility (public only) and closed-source redirect (no source; purchase link).
+- Ships as a package (`@modulora/mcp`) or `modulora mcp` subcommand (decide at build time).
+
+### Acceptance
+
+- An agent can search + fetch a public component and receive a valid install command over MCP.
+- Closed-source items never leak source over MCP.
 
 ## Test and security contract
 
