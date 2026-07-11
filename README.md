@@ -21,6 +21,11 @@ It will not execute creator-provided shell commands or lifecycle scripts. MCP di
 
 See [`CHECKLIST.md`](./CHECKLIST.md) for implementation gates.
 
+## Build plan
+
+- [`PLAN.md`](./PLAN.md) — self-contained scope, dependencies, milestones, acceptance criteria, security/test gates, and definition of done.
+- [`CHECKLIST.md`](./CHECKLIST.md) — concise progress tracker.
+
 ## License
 
 Apache License 2.0.
