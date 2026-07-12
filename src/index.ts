@@ -8,6 +8,7 @@ import { mcpCommand } from "./commands/mcp.js";
 import { verifyCommand } from "./commands/verify.js";
 import { diffCommand } from "./commands/diff.js";
 import { updateCommand } from "./commands/update.js";
+import { publishCommand } from "./commands/publish.js";
 import { CliError, log } from "./lib/output.js";
 
 const main = defineCommand({
@@ -24,6 +25,7 @@ const main = defineCommand({
     verify: verifyCommand,
     diff: diffCommand,
     update: updateCommand,
+    publish: publishCommand,
     login: loginCommand,
     whoami: whoamiCommand,
     logout: logoutCommand,
