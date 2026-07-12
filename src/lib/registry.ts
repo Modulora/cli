@@ -1,4 +1,5 @@
 import { registryUrl } from "../config.js";
+import { authHeaders, getToken } from "./auth.js";
 import { CliError } from "./output.js";
 
 export interface RegistryFile {
@@ -35,13 +36,23 @@ export async function fetchRegistryItem(ref: string): Promise<RegistryItem> {
   const url = `${registryUrl()}/r/${ref}`;
   let res: Response;
   try {
-    res = await fetch(url, { headers: { accept: "application/json" } });
+    res = await fetch(url, { headers: { accept: "application/json", ...authHeaders() } });
   } catch (err) {
     throw new CliError(`Could not reach the registry at ${registryUrl()} (${(err as Error).message}).`);
   }
+  if (res.status === 402) {
+    const body = (await res.json().catch(() => ({}))) as { purchase_url?: string; price?: number; currency?: string };
+    const price = body.price ? ` ($${(body.price / 100).toFixed(2)})` : "";
+    const hint = getToken()
+      ? "You haven't purchased it on this account."
+      : "If you've purchased it, run `modulora login` first.";
+    throw new CliError(
+      `${ref} is a paid component${price}. ${hint}\n  Buy it at: ${body.purchase_url ?? `${registryUrl()}/components/${ref}`}`,
+    );
+  }
   if (res.status === 404) {
     throw new CliError(
-      `${ref} was not found. It may be private, paid, unlisted, or not yet approved for public install.`,
+      `${ref} was not found. It may be private, unlisted, or not yet approved for public install.`,
     );
   }
   if (!res.ok) {
