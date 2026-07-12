@@ -6,6 +6,8 @@ import { fetchRegistryItem, parseRef, sendInstallReceipt } from "../lib/registry
 import { resolveTargets } from "../lib/project.js";
 import { verifyItem } from "../lib/verify.js";
 import { guard } from "../lib/run.js";
+import { recordInstall } from "../lib/lockfile.js";
+import { registryUrl } from "../config.js";
 import { CliError, log, pc } from "../lib/output.js";
 
 export const addCommand = defineCommand({
@@ -82,8 +84,17 @@ export const addCommand = defineCommand({
       writeFileSync(t.absPath, item.files[i]!.content, "utf8");
     }
 
-    // 5. Report the install (best effort; the server re-verifies the digest).
+    // 5. Record the install in modulora.lock (per-file hashes of what we
+    // wrote — verify/diff/update use these to detect local modifications).
     const parsed = parseRef(ref);
+    recordInstall(cwd, `@${parsed.namespace}/${parsed.name}`, {
+      version: item.meta?.version ?? parsed.version ?? "",
+      digest: verify.expected,
+      registry: registryUrl(),
+      files: targets.map((t, i) => ({ displayPath: t.displayPath, content: item.files[i]!.content })),
+    });
+
+    // 6. Report the install (best effort; the server re-verifies the digest).
     await sendInstallReceipt({
       namespace: parsed.namespace,
       name: parsed.name,

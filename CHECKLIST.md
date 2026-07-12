@@ -11,7 +11,7 @@
 
 ## Discovery
 
-- [ ] Implement `search` against the public API.
+- [x] Implement `search` against the public API.
 - [x] Implement `info` against the public registry (`/r/`).
 - [~] Display creator, source model, compatibility, dependencies, and evidence. _(deps + digest done; creator/evidence pending an API surface)_
 - [x] Support machine-readable JSON output.

@@ -59,6 +59,19 @@ Read-only MCP server (stdio) for AI agents: `search_components`,
 purchase URL, never source), `get_install_command`. Writes always go through
 `modulora add`.
 
+### `modulora verify`
+
+Check installed components against `modulora.lock`: intact, locally
+modified, or missing files. Exit 1 when anything is dirty.
+
+### `modulora diff <@user/name>` / `modulora update <@user/name>`
+
+`diff` compares the installed release, your local working copy, and the
+latest upstream release per file: unchanged / update / local edit /
+conflict / new / removed. `update` applies upstream changes after verifying
+the release digest — it refuses on conflicts and **never discards local
+edits**; locally-edited files keep their dirty flag in the lockfile.
+
 ### Configuration
 
 `MODULORA_REGISTRY_URL` overrides the registry origin (default
