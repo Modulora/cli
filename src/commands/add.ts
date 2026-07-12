@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { createInterface } from "node:readline/promises";
 import { defineCommand } from "citty";
-import { fetchRegistryItem } from "../lib/registry.js";
+import { fetchRegistryItem, parseRef, sendInstallReceipt } from "../lib/registry.js";
 import { resolveTargets } from "../lib/project.js";
 import { verifyItem } from "../lib/verify.js";
 import { guard } from "../lib/run.js";
@@ -81,6 +81,15 @@ export const addCommand = defineCommand({
       mkdirSync(dirname(t.absPath), { recursive: true });
       writeFileSync(t.absPath, item.files[i]!.content, "utf8");
     }
+
+    // 5. Report the install (best effort; the server re-verifies the digest).
+    const parsed = parseRef(ref);
+    await sendInstallReceipt({
+      namespace: parsed.namespace,
+      name: parsed.name,
+      version: item.meta?.version ?? parsed.version ?? "",
+      digest: verify.computed,
+    });
 
     if (!json) {
       log.ok(`Installed ${plan.length} file(s) from ${pc.bold(ref)}.`);

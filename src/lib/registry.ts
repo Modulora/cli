@@ -31,6 +31,29 @@ export function parseRef(ref: string): { namespace: string; name: string; versio
   return { namespace: m[1]!, name: m[2]!, version: m[3] };
 }
 
+/**
+ * Report a completed install (best effort — never throws, never blocks).
+ * The server re-verifies the digest independently; receipts power creator
+ * attribution (profit share) and analytics.
+ */
+export async function sendInstallReceipt(input: {
+  namespace: string;
+  name: string;
+  version: string;
+  digest: string;
+}): Promise<void> {
+  try {
+    await fetch(`${registryUrl()}/api/install-receipt`, {
+      method: "POST",
+      headers: { "content-type": "application/json", ...authHeaders() },
+      body: JSON.stringify({ ...input, client: "modulora-cli" }),
+      signal: AbortSignal.timeout(4000),
+    });
+  } catch {
+    /* receipts are best-effort */
+  }
+}
+
 export async function fetchRegistryItem(ref: string): Promise<RegistryItem> {
   parseRef(ref); // validate before hitting the network
   const url = `${registryUrl()}/r/${ref}`;
