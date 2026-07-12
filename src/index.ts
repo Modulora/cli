@@ -3,6 +3,7 @@ import { defineCommand, runMain } from "citty";
 import { addCommand } from "./commands/add.js";
 import { infoCommand } from "./commands/info.js";
 import { loginCommand, logoutCommand, whoamiCommand } from "./commands/login.js";
+import { searchCommand } from "./commands/search.js";
 import { CliError, log } from "./lib/output.js";
 
 const main = defineCommand({
@@ -14,6 +15,7 @@ const main = defineCommand({
   subCommands: {
     add: addCommand,
     info: infoCommand,
+    search: searchCommand,
     login: loginCommand,
     whoami: whoamiCommand,
     logout: logoutCommand,
