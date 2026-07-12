@@ -3,23 +3,31 @@
 ## Foundation
 
 - [ ] Confirm the command contract with user testing.
-- [ ] Scaffold TypeScript package and reusable installer library.
+- [x] Scaffold TypeScript package and reusable installer library. _(v0: single package, ESM, citty)_
 - [ ] Add cross-platform CI for macOS, Linux, and Windows.
-- [ ] Add structured output and stable exit codes for agents/CI.
+- [x] Add structured output and stable exit codes for agents/CI. _(`--json`, clean errors, exit codes)_
 - [ ] Configure protected npm trusted publishing and provenance.
 - [ ] Set up Tegami release script (changelogs, version bumps, publish lock consumed by CI).
 
 ## Discovery
 
-- [ ] Implement `search` and `info` against the public API.
-- [ ] Display creator, source model, compatibility, dependencies, and evidence.
-- [ ] Support machine-readable JSON output.
+- [ ] Implement `search` against the public API.
+- [x] Implement `info` against the public registry (`/r/`).
+- [~] Display creator, source model, compatibility, dependencies, and evidence. _(deps + digest done; creator/evidence pending an API surface)_
+- [x] Support machine-readable JSON output.
+
+## Installation (v0)
+
+- [x] `modulora add` fetches a release and writes files (no scripts, ever).
+- [x] Recompute the content digest locally and compare to the published digest.
+- [x] `--dry-run` write plan; overwrite + unverifiable confirmations.
+- [x] Server exposes the digest on `/r/` (`meta.contentSha256`); digest is canonical across publish, serve, and CLI.
 
 ## Verification
 
 - [ ] Implement canonical manifest and attestation parsing.
-- [ ] Verify signatures, digests, namespace, version, and revocation.
-- [ ] Fail closed on invalid, unknown, revoked, or mismatched signatures.
+- [~] Verify signatures, digests, namespace, version, and revocation. _(content digest done; signatures/revocation pending)_
+- [x] Fail closed on digest mismatch (refuse to write unless `--force`).
 - [ ] Distinguish platform evidence from creator claims.
 
 ## Installation safety
