@@ -70,7 +70,7 @@ export async function fetchRegistryItem(ref: string): Promise<RegistryItem> {
       ? "You haven't purchased it on this account."
       : "If you've purchased it, run `modulora login` first.";
     throw new CliError(
-      `${ref} is a paid component${price}. ${hint}\n  Buy it at: ${body.purchase_url ?? `${registryUrl()}/components/${ref}`}`,
+      `${ref} is a paid component${price}. ${hint}\n  Buy it at: ${body.purchase_url ?? `${registryUrl()}/components/${ref.slice(1)}`}`,
     );
   }
   if (res.status === 404) {
