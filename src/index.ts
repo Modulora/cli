@@ -4,6 +4,7 @@ import { addCommand } from "./commands/add.js";
 import { infoCommand } from "./commands/info.js";
 import { loginCommand, logoutCommand, whoamiCommand } from "./commands/login.js";
 import { searchCommand } from "./commands/search.js";
+import { mcpCommand } from "./commands/mcp.js";
 import { CliError, log } from "./lib/output.js";
 
 const main = defineCommand({
@@ -16,6 +17,7 @@ const main = defineCommand({
     add: addCommand,
     info: infoCommand,
     search: searchCommand,
+    mcp: mcpCommand,
     login: loginCommand,
     whoami: whoamiCommand,
     logout: logoutCommand,

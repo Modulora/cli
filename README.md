@@ -52,6 +52,13 @@ Verification outcomes:
 Files land under `src/` when the project has a `src/` directory, otherwise at
 the project root. The CLI refuses any path that escapes the project.
 
+### `modulora mcp`
+
+Read-only MCP server (stdio) for AI agents: `search_components`,
+`get_component` (registry item + published digest; paid returns price +
+purchase URL, never source), `get_install_command`. Writes always go through
+`modulora add`.
+
 ### Configuration
 
 `MODULORA_REGISTRY_URL` overrides the registry origin (default
