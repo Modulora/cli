@@ -16,8 +16,14 @@ export interface RegistryItem {
   description?: string;
   dependencies?: string[];
   files: RegistryFile[];
-  /** Non-standard Modulora field: the published content digest for verification. */
-  meta?: { contentSha256: string | null; version: string };
+  /** Non-standard Modulora field: digest for verification; collections add
+   *  kind + per-member refs (each installed and verified individually). */
+  meta?: {
+    contentSha256: string | null;
+    version: string;
+    kind?: "collection";
+    items?: { ref: string; version: string; contentSha256: string | null }[];
+  };
 }
 
 /** Parse `@user/name` or `@user/name@version` — validates the shape only. */

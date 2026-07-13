@@ -25,8 +25,44 @@ export const addCommand = defineCommand({
     const ref = String(args.ref);
     const cwd = args.cwd ? String(args.cwd) : process.cwd();
     const json = Boolean(args.json);
+    const opts = { cwd, json, dryRun: Boolean(args["dry-run"]), yes: Boolean(args.yes), force: Boolean(args.force) };
 
     const item = await fetchRegistryItem(ref);
+
+    // Collections install as N individually-verified component installs —
+    // trust stays per component, never a combined blob.
+    if (item.meta?.kind === "collection") {
+      const members = item.meta.items ?? [];
+      if (members.length === 0) throw new CliError(`${ref} is an empty collection.`);
+      if (!json) {
+        log.info(`${pc.bold(ref)}  ${pc.dim(`collection · ${members.length} component(s)`)}`);
+        log.info("");
+      }
+      for (const member of members) {
+        const memberItem = await fetchRegistryItem(member.ref);
+        await installItem(member.ref, memberItem, opts);
+        if (!json) log.info("");
+      }
+      if (!json && !opts.dryRun) log.ok(`Installed the ${pc.bold(ref)} collection (${members.length} component(s)).`);
+      return;
+    }
+
+    await installItem(ref, item, opts);
+   });
+  },
+});
+
+interface InstallOpts {
+  cwd: string;
+  json: boolean;
+  dryRun: boolean;
+  yes: boolean;
+  force: boolean;
+}
+
+async function installItem(ref: string, item: Awaited<ReturnType<typeof fetchRegistryItem>>, opts: InstallOpts) {
+    const { cwd, json } = opts;
+    const args = { "dry-run": opts.dryRun, yes: opts.yes, force: opts.force } as const;
     if (item.files.length === 0) {
       throw new CliError(
         `${ref} has no installable source. Paid or external components are purchased/installed from modulora.dev.`,
@@ -110,9 +146,7 @@ export const addCommand = defineCommand({
         log.info(`  ${pc.cyan(depCommand(item.dependencies))}`);
       }
     }
-   });
-  },
-});
+}
 
 function printPlan(
   ref: string,
