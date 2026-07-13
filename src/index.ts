@@ -6,6 +6,7 @@ import { loginCommand, logoutCommand, whoamiCommand } from "./commands/login.js"
 import { searchCommand } from "./commands/search.js";
 import { mcpCommand } from "./commands/mcp.js";
 import { verifyCommand } from "./commands/verify.js";
+import { checkCommand } from "./commands/check.js";
 import { diffCommand } from "./commands/diff.js";
 import { updateCommand } from "./commands/update.js";
 import { publishCommand } from "./commands/publish.js";
@@ -23,6 +24,7 @@ const main = defineCommand({
     search: searchCommand,
     mcp: mcpCommand,
     verify: verifyCommand,
+    check: checkCommand,
     diff: diffCommand,
     update: updateCommand,
     publish: publishCommand,
