@@ -22,7 +22,7 @@ export interface RegistryItem {
     contentSha256: string | null;
     version: string;
     kind?: "collection";
-    items?: { ref: string; version: string; contentSha256: string | null }[];
+    items?: { ref: string; version: string; contentSha256: string | null; paid?: boolean }[];
   };
 }
 

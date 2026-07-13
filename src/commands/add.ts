@@ -38,12 +38,31 @@ export const addCommand = defineCommand({
         log.info(`${pc.bold(ref)}  ${pc.dim(`collection · ${members.length} component(s)`)}`);
         log.info("");
       }
+      let installed = 0;
+      const skipped: { ref: string; reason: string }[] = [];
       for (const member of members) {
-        const memberItem = await fetchRegistryItem(member.ref);
-        await installItem(member.ref, memberItem, opts);
+        try {
+          const memberItem = await fetchRegistryItem(member.ref);
+          await installItem(member.ref, memberItem, opts);
+          installed++;
+        } catch (error) {
+          // Paid members you haven't purchased (or other member-level
+          // failures) skip cleanly — the rest of the kit still installs.
+          if (error instanceof CliError) {
+            skipped.push({ ref: member.ref, reason: error.message.split("\n")[0]! });
+            if (!json) log.warn(`skipped ${member.ref}: ${error.message.split("\n")[0]}`);
+          } else {
+            throw error;
+          }
+        }
         if (!json) log.info("");
       }
-      if (!json && !opts.dryRun) log.ok(`Installed the ${pc.bold(ref)} collection (${members.length} component(s)).`);
+      if (!json && !opts.dryRun) {
+        log.ok(`Installed ${installed}/${members.length} component(s) from the ${pc.bold(ref)} collection.`);
+        if (skipped.length > 0) log.info(pc.dim(`  Skipped: ${skipped.map((s) => s.ref).join(", ")}`));
+      }
+      if (json) console.log(JSON.stringify({ ref, installed, skipped }, null, 2));
+      if (skipped.length > 0) process.exitCode = 1;
       return;
     }
 
