@@ -9,12 +9,12 @@ import { verifyCommand } from "./commands/verify.js";
 import { diffCommand } from "./commands/diff.js";
 import { updateCommand } from "./commands/update.js";
 import { publishCommand } from "./commands/publish.js";
-import { CliError, log } from "./lib/output.js";
+import { CLI_VERSION, CliError, log } from "./lib/output.js";
 
 const main = defineCommand({
   meta: {
     name: "modulora",
-    version: "0.0.0",
+    version: CLI_VERSION,
     description: "Install and verify Modulora components.",
   },
   subCommands: {

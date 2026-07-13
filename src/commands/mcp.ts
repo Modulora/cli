@@ -14,7 +14,7 @@ import { z } from "zod";
 import { registryUrl } from "../config.js";
 import { fetchRegistryItem } from "../lib/registry.js";
 import { verifyItem } from "../lib/verify.js";
-import { CliError } from "../lib/output.js";
+import { CLI_VERSION, CliError } from "../lib/output.js";
 
 function text(payload: unknown) {
   return { content: [{ type: "text" as const, text: JSON.stringify(payload, null, 2) }] };
@@ -23,7 +23,7 @@ function text(payload: unknown) {
 export const mcpCommand = defineCommand({
   meta: { name: "mcp", description: "Run a read-only MCP server for AI agents (stdio)." },
   async run() {
-    const server = new McpServer({ name: "modulora", version: "0.0.0" });
+    const server = new McpServer({ name: "modulora", version: CLI_VERSION });
 
     server.registerTool(
       "search_components",

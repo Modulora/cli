@@ -1,0 +1,11 @@
+core:changelogs:
+  - content: "---\npackages:\n  modulora:\n    type: minor\n---\n\n## Initial release: the verified install engine\n\n`search`, `info`, `add` (content-digest verification — refuses mismatches),\n`verify`/`diff`/`update` over `modulora.lock` (never discards local edits),\ndevice-flow `login`/`whoami`/`logout`, entitlement-gated paid installs,\ninstall receipts, `publish` from a local manifest, and a read-only MCP\nserver (`modulora mcp`) for AI agents.\n"
+    filename: v0-install-engine.md
+    v: 0.0.0
+core:packages:
+  - changelogIds:
+      - v0-install-engine.md
+    id: npm:modulora
+    updated: true
+npm:packages:
+  - id: npm:modulora

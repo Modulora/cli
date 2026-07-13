@@ -1,6 +1,6 @@
 {
   "name": "modulora",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Install and verify Modulora components — with a byte-for-byte content digest check and no install scripts.",
   "license": "Apache-2.0",
   "type": "module",
@@ -17,7 +17,8 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "tegami": "node scripts/tegami.mts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "tegami": "^1.2.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
